@@ -1,10 +1,5 @@
-import { RecentGroupList } from '@/app/groups/recent-group-list'
-import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-export const metadata: Metadata = {
-  title: 'Recently visited groups',
-}
-
-export default async function GroupsPage() {
-  return <RecentGroupList />
+export default function GroupsPage() {
+  redirect('/groups/dGhXX3Y3DAi5oaCpPz7Fx')
 }
