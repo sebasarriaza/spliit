@@ -120,12 +120,16 @@ export async function getGroupExpensesParticipants(groupId: string) {
 }
 
 export async function getGroups(groupIds: string[]) {
-  return (
-    await prisma.group.findMany({
-      where: { id: { in: groupIds } },
-      include: { _count: { select: { participants: true } } },
-    })
-  ).map((group) => ({
+  console.log('[🔍 BACKEND] groupIds input:', groupIds)
+
+  const result = await prisma.group.findMany({
+    where: { id: { in: groupIds } },
+    include: { _count: { select: { participants: true } } },
+  })
+
+  console.log('[✅ BACKEND] groups found:', result.length)
+
+  return result.map((group) => ({
     ...group,
     createdAt: group.createdAt.toISOString(),
   }))
