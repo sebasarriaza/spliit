@@ -11,11 +11,17 @@ export const CreateGroup = () => {
 
   return (
     <GroupForm
-      onSubmit={async (groupFormValues) => {
-        const { groupId } = await mutateAsync({ groupFormValues })
-        await utils.groups.invalidate()
-        router.push(`/groups/${groupId}`)
-      }}
-    />
+  onSubmit={async (groupFormValues) => {
+    const { groupId } = await mutateAsync({ groupFormValues })
+
+    // Guarda en localStorage
+    const current = JSON.parse(localStorage.getItem('spliit_groups') ?? '[]') as string[]
+    const updated = Array.from(new Set([...current, groupId]))
+    localStorage.setItem('spliit_groups', JSON.stringify(updated))
+
+    await utils.groups.invalidate()
+    router.push(`/groups/${groupId}`)
+  }}
+/>
   )
 }
