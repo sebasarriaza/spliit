@@ -8,23 +8,28 @@ export function randomId() {
 }
 
 export async function createGroup(groupFormValues: GroupFormValues) {
-  return prisma.group.create({
-    data: {
-      id: randomId(),
-      name: groupFormValues.name,
-      information: groupFormValues.information,
-      currency: groupFormValues.currency,
-      participants: {
-        createMany: {
-          data: groupFormValues.participants.map(({ name }) => ({
-            id: randomId(),
-            name,
-          })),
+  try {
+    return await prisma.group.create({
+      data: {
+        id: randomId(),
+        name: groupFormValues.name,
+        information: groupFormValues.information,
+        currency: groupFormValues.currency, // <= probablemente el problema está aquí
+        participants: {
+          createMany: {
+            data: groupFormValues.participants.map(({ name }) => ({
+              id: randomId(),
+              name,
+            })),
+          },
         },
       },
-    },
-    include: { participants: true },
-  })
+      include: { participants: true },
+    })
+  } catch (error) {
+    console.error('❌ Error al crear grupo:', error)
+    throw error
+  }
 }
 
 export async function createExpense(
